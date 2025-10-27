@@ -1,0 +1,25 @@
+services:
+  mongo:
+    image: mongo:5.0
+    container_name: mongo_container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  app:
+    build:
+      context: ./express
+      dockerfile: Dockerfile
+    container_name: node_app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./express:/usr/src/app
+    working_dir: /usr/src/app
+    command: ["npm", "start"]
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:
